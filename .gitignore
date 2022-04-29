@@ -1,4 +1,6 @@
-DS_Store config/
+DS_Store
+config/
+connection.js
 
 # Logs
 logs
