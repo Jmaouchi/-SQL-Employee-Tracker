@@ -23,7 +23,7 @@ app.use((req, res) => {
 db.connect(err => {
   if (err) throw err;
   console.log('Database connected.');
-   startPrompt();
+  //  startPrompt();
 });
 
 
