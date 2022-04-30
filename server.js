@@ -1,31 +1,16 @@
-const express = require('express');
+//create a connection to database
 const db = require('./config/connection');
-const inquirer = require('inquirer')
+// reaquire consol.table
 const table = require("console.table");
+//require inquirer
+const inquirer = require('inquirer')
+// get the view functionality from the view.js file (the view file will contain all the view options promots)
+const {viewList} = require('./lib/view')
+// get the add functionality from the add.js file (the add file will contain all the add options promots)
+const {addList} = require('./lib/add')
+// get the add functionality from the add.js file (the add file will contain all the add options promots)
+const {update} = require('./lib/update.js')
 
-
-//Set up a port 
-const PORT = process.env.PORT || 2999;
-
-const app = express();
-
-
-// Express middleware
-app.use(express.urlencoded({ extended: false }));
-app.use(express.json());
-
-
-// this will be the last 
-app.use((req, res) => {
-  res.status(404).end();
-});
-
-// Start server after DB connection
-db.connect(err => {
-  if (err) throw err;
-  console.log('Database connected.');
-  start();
-});
 
 
 // start prompting 
@@ -37,52 +22,36 @@ const start = () => {
       type: 'list',
       name: 'start',
       message: "Please select which option you want to view? (Required)",
-      choices: ['view all departments', 'view all roles', 'view all employees', 'add a department', 'add a role',
-               'add an employee', 'update an employee role']
+      choices: ['View', 'Add', 'Update', 'Exit']
     },
   ])
   .then(function (res){
       switch(res.start){
-        case 'view all departments':
-          viewAllDepartements();
+        case 'View':
+          // to check this function, go to view.js file
+          viewList();
           break;
   
-        case 'view all roles':
-          console.log('roles');
+        case 'Add':
+          // to check this function, go to add.js file 
+          addList();
           break;
 
-        case 'vview all employees':
-          console.log('employees');
+        case 'Update':
+          // to check this function, go to update.js file
+          update();
           break;
 
-        case 'add a department':
-          console.log('add depart');
-          break;
-            
-        case 'add a role':
-          console.log('add role');
-          break;
-
-        case 'add an employee':
-          console.log(' add an employee');
-          break;
-
-        case 'update an employee role':
-          console.log(' update an employee role');
+        case 'Exit':
+          console.log('---------------');
+          console.log('Have a good day');
+          console.log('---------------');
           break;
          
         default:
             console.log('default');
       }}) 
     }
-  
 
 
-
-// first function 
-const viewAllDepartements = function() {
-       console.log('heyas');
-    }
-
-
-start()
+start();
