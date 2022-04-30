@@ -16,9 +16,9 @@ const connection = mysql.createConnection(
   {
     host: 'localhost',
     // Your MySQL username,
-    user: '',
+    user: 'root',
     // Your MySQL password
-    password: '',
+    password: 'Unebellevie2018$inchalah',
     database: 'business_Owner'
   },
 );
@@ -114,7 +114,13 @@ const viewList = function() {
 
 //viewAllDepartments function definition
 const viewAllDepartments = function () {
-  connection.query("SELECT * FROM departments", function (err, res) {
+  connection.query(`SELECT first_name AS first Name, 
+  last_name AS Last Name, 
+  role.id AS role, 
+  roles.salary FROM roles
+  INNER JOIN departments 
+  ON roles.department_id = departments.id 
+  ORDER BY id ASC`, function (err, res) {
     if (err) throw err;
     console.table(res);
   });
@@ -123,9 +129,15 @@ const viewAllDepartments = function () {
 
 // second list to view
 const viewAllRoles =  () => {
-  connection.query("SELECT * FROM roles", function (err, res) {
+  connection.query(`SELECT roles.id, 
+  roles.title, 
+  departments.name AS department, 
+  roles.salary FROM roles
+  INNER JOIN departments 
+  ON roles.department_id = departments.id 
+  ORDER BY id ASC`, function (err, res) {
     if (err) throw err;
-
+    
     console.log("-----------------------------------------------");
     console.table(res);
   });
@@ -135,7 +147,21 @@ const viewAllRoles =  () => {
 
 // third list to view
 const viewAllEmployees =  () => {
-  console.log('all employees are');
+  connection.query(`SELECT employees.id, 
+  employees.first_name, 
+  employees.last_name, 
+  roles.title, 
+  departments.name AS department, 
+  roles.salary, 
+  CONCAT(manager.first_name, " ", manager.last_name) AS manager FROM employees 
+  INNER JOIN roles ON employees.role_id = roles.id 
+  INNER JOIN departments ON roles.department_id = departments.id 
+  LEFT JOIN employees manager ON employees.manager_id = manager.id 
+  ORDER BY id ASC`, function(err,res){
+    if(err) throw err;
+
+    console.table(res);
+  })
 }
 
 
