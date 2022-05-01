@@ -4,6 +4,7 @@ const table = require("console.table");
 const inquirer = require('inquirer')
 // require MySql to create the connection to server
 const mysql = require('mysql2');
+const { resourceLimits } = require("worker_threads");
 // Connect to database
 const connection = mysql.createConnection(
   {
@@ -61,27 +62,27 @@ connection.connect(function(err){
             
           case 'add a role':
             // to check this function, go to update.js file
-            viewAllEmployees();
+            addRole();
             break;
          
           case 'add an employee':
             // to check this function, go to update.js file
-            viewAllEmployees();
+            addEmployee();
             break; 
             
             
           case 'update an employee role':
             // to check this function, go to update.js file
-            viewAllEmployees();
+            updateEmployee();
             break  
 
-        case 'Exit':
-          console.log('---------------');
-          console.log('Have a good day');
-          console.log('---------------');
-          break;
-          
-        default:
+          case 'Exit':
+            console.log('---------------');
+            console.log('Have a good day');
+            console.log('---------------');
+            break;
+            
+          default:
             console.log('default');
     }}) 
   }
@@ -146,8 +147,6 @@ const viewAllEmployees =  () => {
 
 
 
-// start adding
-
 // add a departement to the departements table
 const addDepartement =  () => {
   return inquirer.prompt([
@@ -175,54 +174,130 @@ const addDepartement =  () => {
       console.log("Added ", res.newDepartment, " to the database");
       start()
     })
-  }
-
-// second add a role
-const addRoles=  () => {
-  return inquirer.prompt([
-    {
-      type: 'input',
-      name: 'role',
-      message: "What is the name of the role?",
-      validate: nameInput => {
-        if (nameInput) {
-          return true;
-        } else {
-          console.log('Please enter a title for the role!');
-          return false;
-        }
-      }    
-    },
-    {
-      type: 'input',
-      name: 'salary',
-      message: "Enter Salary",
-      validate: nameInput => {
-        if (nameInput) {
-          return true;
-        } else {
-          console.log('Enter salary!');
-          return false;
-        }
-      }    
-    },
-    {
-      type: 'input',
-      name: 'departement_id',
-      message: "What departement your role belong to?",
-      validate: nameInput => {
-        if (nameInput) {
-          return true;
-        } else {
-          console.log('Enter departement_id!');
-          return false;
-        }
-      }    
-    },
-  ])
-  .then(function (res){
-    console.log('Role is added');
-  })
 }
 
 
+
+// third list to view
+const addRole =  () => {
+
+  connection.query("SELECT * FROM departments", function(err, results){
+    if(err) throw err;
+    // get the departements choices from the departement table
+    var roleChoices = function(){
+      let choiceArr = [];
+      for (i=0; i< results.length ; i++){
+        choiceArr.push(results[i].title)
+      }
+      return choiceArr;
+    }
+
+    //start the prompt
+    inquirer.prompt([
+      {
+        type: 'input',
+        name: 'newRoleName',
+        message: "What is the name of the role?",  
+      },
+      {
+        type: 'number',
+        name: 'newRoleSalary',
+        message: "Enter Salary",   
+      },
+      {
+        type: 'list',
+        name: 'newRoleDept',
+        choices: roleChoices(),
+        message: "What departement your role belong to?"
+      },
+            
+    ])
+    // Get the prompt data and insert a new role with it
+    .then(function (res){
+    connection.query("INSERT INTO roles SET ?",
+      {
+        title: res.newRoleName,
+        salary: res.newRoleSalary,
+        department_id: res.newRoleDept
+      }
+    )
+    console.log("employee added");
+  })
+})
+}
+
+
+
+// third list to view
+const addEmployee =  () => {
+  // add a query to get the everything from roles table, then add an employee with using the prompt data results
+  connection.query("SELECT * FROM roles", function(err, results){
+    if(err) throw err;
+
+    inquirer.prompt([
+      {
+        type: 'input',
+        name: 'firstName',
+        message: "What is the employee first name?",
+        validate: nameInput => {
+          if (nameInput) {
+            return true;
+          } else {
+            console.log('Please enter the employee name!');
+            return false;
+          }
+        }    
+      },
+      {
+        type: 'input',
+        name: 'lastName',
+        message: "What is the employee last name?",
+        validate: nameInput => {
+          if (nameInput) {
+            return true;
+          } else {
+            console.log('Enter salary!');
+            return false;
+          }
+        }    
+      },
+      {
+        type: 'list',
+        name: 'role',
+        choices: function(){
+            let choiceArr = [];
+            for (i=0; i< results.length ; i++){
+              choiceArr.push(results[i].title)
+            }
+            return choiceArr;
+        },
+        message: "Select Title"
+      },
+      {
+        type: 'input',
+        name: 'number',
+        validate:function(value){
+          if(isNaN(value) === false){
+            return true;
+          }
+          return false;
+        },
+        message: "Enter manager ID",
+        default:"1"    
+      },
+    ])
+    .then(function (res){
+      // Insert a new employee to the employees table using the prompt results
+      connection.query("INSERT INTO employees SET ?",
+        {
+          first_name: res.firstName,
+          last_name: res.lastName,
+          role_id: res.role,
+          manager_id: res.Manager
+        }
+      )
+      console.log("employee added");
+      start()
+    })
+  })
+}
