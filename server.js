@@ -2,13 +2,6 @@
 const table = require("console.table");
 //require inquirer
 const inquirer = require('inquirer')
-// // get the add functionality from the add.js file (the add file will contain all the add options promots)
-// const {viewList} = require('./lib/view')
-// get the add functionality from the add.js file (the add file will contain all the add options promots)
-const {addList} = require('./lib/add')
-// get the add functionality from the add.js file (the add file will contain all the add options promots)
-const {update} = require('./lib/update.js')
-
 // require MySql to create the connection to server
 const mysql = require('mysql2');
 // Connect to database
@@ -18,7 +11,7 @@ const connection = mysql.createConnection(
     // Your MySQL username,
     user: 'root',
     // Your MySQL password
-    password: 'Unebellevie2018$inchalah',
+    password: '',
     database: 'business_Owner'
   },
 );
@@ -31,7 +24,6 @@ connection.connect(function(err){
 })
 
 
-
   // start prompting 
   const start = () => {
   
@@ -41,26 +33,48 @@ connection.connect(function(err){
         type: 'list',
         name: 'start',
         message: "Please select which option you want to view? (Required)",
-        choices: ['View', 'Add', 'Update', 'Exit']
+        choices: ['view all departments', 'view all roles', 'view all employees','add a department', 'add a role', 'add an employee', 'update an employee role']
       },
     ])
     .then(function (res){
       switch(res.start){
-        case 'View':
+        case 'view all departments':
           // to check this function, go to view.js file
-          viewList();
+          viewAllDepartments();
           break;
   
-        case 'Add':
+        case 'view all roles':
           // to check this function, go to add.js file 
-          addList();
+          viewAllRoles();
           break;
   
-        case 'Update':
+        case 'view all employees':
           // to check this function, go to update.js file
-          update();
+          viewAllEmployees();
           break;
-  
+
+          case 'add a department':
+            // to check this function, go to update.js file
+            addDepartement();
+            break;
+            
+            
+          case 'add a role':
+            // to check this function, go to update.js file
+            viewAllEmployees();
+            break;
+         
+          case 'add an employee':
+            // to check this function, go to update.js file
+            viewAllEmployees();
+            break; 
+            
+            
+          case 'update an employee role':
+            // to check this function, go to update.js file
+            viewAllEmployees();
+            break  
+
         case 'Exit':
           console.log('---------------');
           console.log('Have a good day');
@@ -74,57 +88,18 @@ connection.connect(function(err){
 
 
 
-
-// Let's start with the view option first
-const viewList = function() {
-  return inquirer.prompt([
-    {
-      type: 'list',
-      name: 'start',
-      message: "Please select which option you want to view? (Required)",
-      choices: ['view all departments', 'view all roles', 'view all employees', 'Exit']
-    },
-  ])
-  .then(function (res){
-    switch(res.start){
-      case 'view all departments':
-        viewAllDepartments()
-        break;
-
-      case 'view all roles':
-        viewAllRoles();
-        break;
-
-      case 'view all employees':
-        viewAllEmployees();
-        break;
-
-      case 'Exit':
-        console.log('---------------');
-        console.log('Have a good day');
-        console.log('---------------');
-        break;
-        
-      default:
-          console.log('lol');
-  }}) 
-}
-
-
-
 //viewAllDepartments function definition
 const viewAllDepartments = function () {
-  connection.query(`SELECT first_name AS first Name, 
-  last_name AS Last Name, 
-  role.id AS role, 
-  roles.salary FROM roles
-  INNER JOIN departments 
-  ON roles.department_id = departments.id 
-  ORDER BY id ASC`, function (err, res) {
+  connection.query(`SELECT * FROM departments
+  ORDER BY name ASC`, function (err, res) {
     if (err) throw err;
+    console.log("-----------------------------------------------");
+    console.log("---------------- All Departements --------------");
     console.table(res);
+    start();
   });
-  start();
+  
+
 };
 
 // second list to view
@@ -139,9 +114,12 @@ const viewAllRoles =  () => {
     if (err) throw err;
     
     console.log("-----------------------------------------------");
+    console.log("------------------All Roles--------------------");
     console.table(res);
+    start()
   });
-  start()
+
+
 }
 
 
@@ -160,9 +138,91 @@ const viewAllEmployees =  () => {
   ORDER BY id ASC`, function(err,res){
     if(err) throw err;
 
+    console.log("------------------All Employees--------------------");
     console.table(res);
+    start()
   })
 }
 
+
+
+// start adding
+
+// add a departement to the departements table
+const addDepartement =  () => {
+  return inquirer.prompt([
+    {
+      type: 'input',
+      name: "newDepartment",
+      message: "What is the name of your departement?",
+      validate: nameInput => {
+        if (nameInput) {
+          return true;
+        } else {
+          console.log('Please enter your departement name!');
+          return false;
+        }
+      }    
+    }
+  ])
+  .then(function (res){
+    connection.query(
+      `INSERT INTO departments SET ?`,
+      // get the name row of the departement table and insert the prompt answer as name of a new departement
+      {name: res.newDepartment}
+      );
+      
+      console.log("Added ", res.newDepartment, " to the database");
+      start()
+    })
+  }
+
+// second add a role
+const addRoles=  () => {
+  return inquirer.prompt([
+    {
+      type: 'input',
+      name: 'role',
+      message: "What is the name of the role?",
+      validate: nameInput => {
+        if (nameInput) {
+          return true;
+        } else {
+          console.log('Please enter a title for the role!');
+          return false;
+        }
+      }    
+    },
+    {
+      type: 'input',
+      name: 'salary',
+      message: "Enter Salary",
+      validate: nameInput => {
+        if (nameInput) {
+          return true;
+        } else {
+          console.log('Enter salary!');
+          return false;
+        }
+      }    
+    },
+    {
+      type: 'input',
+      name: 'departement_id',
+      message: "What departement your role belong to?",
+      validate: nameInput => {
+        if (nameInput) {
+          return true;
+        } else {
+          console.log('Enter departement_id!');
+          return false;
+        }
+      }    
+    },
+  ])
+  .then(function (res){
+    console.log('Role is added');
+  })
+}
 
 
