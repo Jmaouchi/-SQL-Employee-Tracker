@@ -175,17 +175,18 @@ const addDepartement =  () => {
 
 
 // addRole function definition
-const addRole =  () => {
+function addRole ()  {
 
-  connection.query("SELECT * FROM departments", function(err, results){
-    if(err) throw err;
+  connection.query(`SELECT * FROM departments`, (err, results) => {
+
     // get the departements choices from the departement table
-    var roleChoices = function(){
-      let choiceArr = [];
-      for (i=0; i< results.length ; i++){
-        choiceArr.push(results[i].title)
-      }
-      return choiceArr;
+    let deptaArr = [];
+    if(err) {
+      console.log(err);
+    }
+
+    for (let i = 0; i< results.length; i++){
+      deptaArr.push({name: results[i].name, value: results[i].id});
     }
 
     //start the prompt
@@ -203,21 +204,26 @@ const addRole =  () => {
       {
         type: 'list',
         name: 'newRoleDept',
-        choices: roleChoices(),
-        message: "What departement your role belong to?"
+        message: "What department your role belong to?",
+        choices: deptaArr
       },
             
     ])
     // Get the prompt data and insert a new role with it
-    .then(function (res){
-    connection.query("INSERT INTO roles SET ?",
-      {
-        title: res.newRoleName,
-        salary: res.newRoleSalary,
-        department_id: res.newRoleDept
+    .then((res) => {
+    connection.query(
+      `INSERT INTO roles (title, salary, department_id)
+      VALUES (?,?,?);`,
+      [res.newRoleName, res.newRoleSalary, res.newRoleDept],
+      (err, results) => {
+        if(err) {
+          console.log(err);
+          return;
+        }
+        console.log("employee added");
       }
+    
     )
-    console.log("employee added");
   })
 })
 }
@@ -272,12 +278,6 @@ const addEmployee =  () => {
       {
         type: 'input',
         name: 'number',
-        validate:function(value){
-          if(isNaN(value) === false){
-            return true;
-          }
-          return false;
-        },
         message: "Enter manager ID",
         default:"1"    
       },
