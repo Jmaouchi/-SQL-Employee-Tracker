@@ -2,9 +2,8 @@
 const table = require("console.table");
 //require inquirer
 const inquirer = require('inquirer')
-// require MySql to create the connection to server
+// require MySql to create the connection to database
 const mysql = require('mysql2');
-const { resourceLimits } = require("worker_threads");
 // Connect to database
 const connection = mysql.createConnection(
   {
@@ -34,7 +33,13 @@ connection.connect(function(err){
         type: 'list',
         name: 'start',
         message: "Please select which option you want to view? (Required)",
-        choices: ['view all departments', 'view all roles', 'view all employees','add a department', 'add a role', 'add an employee', 'update an employee role']
+        choices: [
+                  'view all departments', 
+                  'view all roles', 'view all employees',
+                  'add a department',
+                  'add a role',
+                  'add an employee',
+                  'update an employee role']
       },
     ])
     .then(function (res){
@@ -89,7 +94,7 @@ connection.connect(function(err){
 
 
 
-//viewAllDepartments function definition
+// viewAllDepartments function definition
 const viewAllDepartments = function () {
   connection.query(`SELECT * FROM departments
   ORDER BY name ASC`, function (err, res) {
@@ -103,7 +108,7 @@ const viewAllDepartments = function () {
 
 };
 
-// second list to view
+// viewAllRoles function definition
 const viewAllRoles =  () => {
   connection.query(`SELECT roles.id, 
   roles.title, 
@@ -124,7 +129,7 @@ const viewAllRoles =  () => {
 }
 
 
-// third list to view
+// viewAllEmployees function definition
 const viewAllEmployees =  () => {
   connection.query(`SELECT employees.id, 
   employees.first_name, 
@@ -147,7 +152,7 @@ const viewAllEmployees =  () => {
 
 
 
-// add a departement to the departements table
+// AddDepartement function definition
 const addDepartement =  () => {
   return inquirer.prompt([
     {
@@ -178,7 +183,7 @@ const addDepartement =  () => {
 
 
 
-// third list to view
+// addRole function definition
 const addRole =  () => {
 
   connection.query("SELECT * FROM departments", function(err, results){
@@ -228,7 +233,7 @@ const addRole =  () => {
 
 
 
-// third list to view
+// addEmployee function definition
 const addEmployee =  () => {
   // add a query to get the everything from roles table, then add an employee with using the prompt data results
   connection.query("SELECT * FROM roles", function(err, results){
