@@ -30,7 +30,9 @@ connection.connect(function(err){
                   'add a department',
                   'add a role',
                   'add an employee',
-                  'update an employee role']
+                  'update an employee role',
+                  'Exit'
+                ]
       },
     ])
     .then(function (res){
