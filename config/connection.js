@@ -4,9 +4,9 @@ const connection = mysql.createConnection(
   {
     host: 'localhost',
     // Your MySQL username,
-    user: '',
+    user: 'root',
     // Your MySQL password
-    password: '',
+    password: 'Unebellevie2018$inchalah',
     database: 'business_Owner'
   },
 );
