@@ -4,7 +4,7 @@
   ## Read about MIT license here:  'https://choosealicense.com/licenses/mit/'
 
 
-    Copyright (c) 
+      Copyright (c) 
 Permission is hereby granted, free of charge, to any person obtaining a copy
 of this software and associated documentation files (the "Software"), to deal
 in the Software without restriction, including without limitation the rights
@@ -100,4 +100,4 @@ SOFTWARE
 
 
   # Contribution:
-    made by jugurta maouchi 
+    made by jugurta maouchi  2022
