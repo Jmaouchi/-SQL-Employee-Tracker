@@ -221,6 +221,7 @@ function addRole ()  {
           return;
         }
         console.log("employee added");
+        start();
       }
     
     )
@@ -232,9 +233,18 @@ function addRole ()  {
 
 // addEmployee function definition
 const addEmployee =  () => {
-  // add a query to get the everything from roles table, then add an employee with using the prompt data results
-  connection.query("SELECT * FROM roles", function(err, results){
-    if(err) throw err;
+  // add a query to get the everything from roles table, then add an employee with using the prompt data results 
+  connection.query(`SELECT * FROM roles;`,(err, results) => {
+
+    // get the departements choices from the departement table
+    let rolArr = [];
+    if(err) {
+      console.log(err);
+    }
+
+    for (let i = 0; i< results.length; i++){
+      rolArr.push({firstName: results[i].first_name, lastName: results[i].last_name, role: results[i].role_id, manager: results[i].manager_id});
+    }
 
     inquirer.prompt([
       {
@@ -266,30 +276,28 @@ const addEmployee =  () => {
       {
         type: 'list',
         name: 'role',
-        choices: function(){
-            let choiceArr = [];
-            for (i=0; i< results.length ; i++){
-              choiceArr.push(results[i].title)
-            }
-            return choiceArr;
-        },
-        message: "Select Title"
+        message: "Select Title",
+        choices: rolArr
       },
       {
-        type: 'input',
-        name: 'number',
+        type: 'number',
+        name: 'Manager',
         message: "Enter manager ID",
         default:"1"    
       },
     ])
-    .then(function (res){
+    .then((res) => {
       // Insert a new employee to the employees table using the prompt results
-      connection.query("INSERT INTO employees SET ?",
-        {
-          first_name: res.firstName,
-          last_name: res.lastName,
-          role_id: res.role,
-          manager_id: res.Manager
+      connection.query(`INSERT INTO employees (first_name, last_name, role_id, manager_id)
+        VALUES (?,?,?,?)
+      ;`,
+        [res.firstName, res.lastName, res.role, res.Manager],
+        (err, results) => {
+          if(err){
+            console.log(err);
+            return;
+          }
+          console.log("asda");
         }
       )
       console.log("employee added");
@@ -297,3 +305,4 @@ const addEmployee =  () => {
     })
   })
 }
+
