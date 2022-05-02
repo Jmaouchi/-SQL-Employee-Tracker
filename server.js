@@ -178,7 +178,7 @@ const addDepartement =  () => {
 
 // addRole function definition
 function addRole ()  {
-
+  // select everything from the departments table, to use that for displaying the choices in the prompt
   connection.query(`SELECT * FROM departments`, (err, results) => {
 
     // get the departements choices from the departement table
@@ -196,7 +196,7 @@ function addRole ()  {
       {
         type: 'input',
         name: 'newRoleName',
-        message: "What is the name of the role?",  
+        message:"What is the name of the role?",  
       },
       {
         type: 'number',
@@ -213,6 +213,7 @@ function addRole ()  {
     ])
     // Get the prompt data and insert a new role with it
     .then((res) => {
+    // use the prompt data results to add the new role 
     connection.query(
       `INSERT INTO roles (title, salary, department_id)
       VALUES (?,?,?);`,
@@ -283,7 +284,7 @@ const addEmployee =  () => {
       },
       {
         type: 'number',
-        name: 'Manager',
+        name: 'manager',
         message: "Enter manager ID",
         default:"1"    
       },
@@ -293,7 +294,7 @@ const addEmployee =  () => {
       connection.query(`INSERT INTO employees (first_name, last_name, role_id, manager_id)
         VALUES (?,?,?,?)
       ;`,
-        [res.firstName, res.lastName, res.role, res.Manager],
+        [res.firstName, res.lastName, res.role, res.manager],
         (err, results) => {
           if(err){
             console.log(err);
@@ -308,3 +309,42 @@ const addEmployee =  () => {
   })
 }
 
+
+
+
+// addEmployee function definition
+const updateEmployee =  () => {
+  // add a query to get the everything from roles table, then add an employee with using the prompt data results 
+  connection.query(`SELECT * FROM employees;`,(err, results) => {
+
+    inquirer.prompt([
+      {
+        type: 'list',
+        name: 'choices',
+        choices: function (){
+             // get the departements choices from the departement table
+          let choicesArray = [];
+          if(err) {
+            console.log(err);
+            }
+              // loop through the data and push every element first name to the choicesArray 
+              for (let i = 0; i< results.length; i++){
+                choicesArray.push(results[i].first_name);
+              }
+              return choicesArray;
+        },
+
+        message: "Which employee you want to update?",
+      },
+    ])
+    .then((res) => {
+      // get all the employees again 
+      connection.query(`SELECT * FROM employees;`,(err, results) => {
+      
+      })
+      start()
+    })
+  })
+}
+
+    

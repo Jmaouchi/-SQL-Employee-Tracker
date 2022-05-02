@@ -76,7 +76,7 @@ SOFTWARE
       npm i inquirer, npm i mysql2, npm i console.table
   
 
-  4. Application is deployed on [heroku](https://whispering-crag-45136.herokuapp.com/) : Heroku is a container-based cloud Platform as a Service (PaaS). Developers use Heroku to deploy, manage, and scale modern apps.
+  4. Application is deployed on [heroku](https://dashboard.heroku.com/apps/damp-castle-33448/) : Heroku is a container-based cloud Platform as a Service (PaaS). Developers use Heroku to deploy, manage, and scale modern apps.
 
 
 
