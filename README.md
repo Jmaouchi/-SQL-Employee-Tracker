@@ -91,7 +91,7 @@ SOFTWARE
 
   ## Link:  
    
-  https://dashboard.heroku.com/apps/damp-castle-33448 
+  https://damp-castle-33448.herokuapp.com/
 
 
   # Contact:
