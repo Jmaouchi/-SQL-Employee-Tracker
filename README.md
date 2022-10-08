@@ -1,34 +1,7 @@
-  # license used:  MIT  [![License](https://img.shields.io/apm/l/npm)](https://choosealicense.com/licenses/mit/)
+  # license: [![License](https://img.shields.io/apm/l/npm)](https://choosealicense.com/licenses/mit/)
 
-
-  ## Read about MIT license here:  'https://choosealicense.com/licenses/mit/'
-
-
-      Copyright (c) 
-Permission is hereby granted, free of charge, to any person obtaining a copy
-of this software and associated documentation files (the "Software"), to deal
-in the Software without restriction, including without limitation the rights
-to use, copy, modify, merge, publish, distribute, sublicense, and/or sell
-copies of the Software, and to permit persons to whom the Software is
-furnished to do so, subject to the following conditions:
-
-The above copyright notice and this permission notice shall be included in all
-copies or substantial portions of the Software.
-
-THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
-IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,
-FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE
-AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER
-LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
-OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
-SOFTWARE
     
-  
-
-
-
   # Title: SQL Employee_tracker
-
 
 
   # Table of  Contents
@@ -45,7 +18,7 @@ SOFTWARE
 
 
   # About The Application:
-    An app that can be used to manage a business 
+    A command line interface that allows the user to view and interact with an informational database that stores employees, departments, jobs, and managers using Inquirer.
     
 
   # Technology
@@ -89,14 +62,8 @@ SOFTWARE
   - Part 3 https://github.com/Jmaouchi/-SQL-Employee-Tracker/issues/6
 
 
-  ## Link:  
-   
-  https://damp-castle-33448.herokuapp.com/
-
-
   # Contact:
-  djigo.maouchi@yahoo.com
-
+   djigo.maouchi@yahoo.com
 
 
   # Contribution:
