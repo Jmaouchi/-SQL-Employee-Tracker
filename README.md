@@ -18,7 +18,6 @@
 
 
   # About The Application:
-
   A command line interface that allows the user to view and interact with an informational database that stores employees, departments, jobs, and managers using Inquirer.
     
 
@@ -54,7 +53,7 @@
 
 
 
-  # Watch me do it here: by clicking here   
+  # Watch step by step: 
 
   - Part 1 https://github.com/Jmaouchi/-SQL-Employee-Tracker/issues/7  
   
