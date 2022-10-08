@@ -1,4 +1,4 @@
-  # license: [![License](https://img.shields.io/apm/l/npm)](https://choosealicense.com/licenses/mit/)
+  [![License](https://img.shields.io/apm/l/npm)](https://choosealicense.com/licenses/mit/)
 
     
   # Title: SQL Employee_tracker
